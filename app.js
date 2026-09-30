@@ -2,10 +2,15 @@
 let tasks = [];
 
 // DOM Elements
+const taskForm = document.getElementById("task-form");
+const judulInput = document.getElementById("judul");
+const matkulInput = document.getElementById("matkul");
+const deadlineInput = document.getElementById("deadline");
+const errorMessage = document.getElementById("error-message");
 const taskList = document.getElementById("task-list");
 const counterEl = document.getElementById("counter");
 
-// Fungsi render() untuk menampilkan data dari state
+// Fungsi render()
 function render() {
   taskList.innerHTML = "";
 
@@ -31,7 +36,6 @@ function render() {
       const infoDiv = document.createElement("div");
       infoDiv.className = "task-info";
 
-      // Aman dari XSS menggunakan textContent
       const titleSpan = document.createElement("span");
       titleSpan.className = "task-title";
       titleSpan.textContent = task.judul;
@@ -57,6 +61,43 @@ function render() {
     });
   }
 }
+
+// Form submit listener + preventDefault() + validasi
+taskForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const judul = judulInput.value.trim();
+  const matkul = matkulInput.value;
+  const deadline = deadlineInput.value;
+
+  // Validasi judul >= 3 karakter
+  if (judul.length < 3) {
+    errorMessage.textContent = "Judul minimal harus 3 karakter!";
+    return;
+  }
+
+  // Validasi deadline wajib
+  if (!deadline) {
+    errorMessage.textContent = "Deadline wajib diisi!";
+    return;
+  }
+
+  errorMessage.textContent = "";
+
+  const newTask = {
+    id: Date.now(),
+    judul: judul,
+    matkul: matkul,
+    deadline: deadline,
+    selesai: false
+  };
+
+  tasks.push(newTask);
+  render();
+
+  judulInput.value = "";
+  deadlineInput.value = "";
+});
 
 // Jalankan awal
 render();
