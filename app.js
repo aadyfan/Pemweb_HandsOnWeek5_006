@@ -16,6 +16,7 @@ function init() {
     tasks = JSON.parse(savedTasks);
   }
   render();
+
 }
 function saveToStorage() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
